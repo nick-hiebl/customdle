@@ -5,7 +5,7 @@
   
   color: white;
   min-height: 100vh;
-  padding-bottom: 80px;
+  padding-bottom: 240px;
 }
 
 h1 {
@@ -75,12 +75,43 @@ h1 {
   top: 0px;
   left: 0px;
   padding: 8px;
+  text-align: left;
 }
 
 .input {
   position: fixed;
   bottom: 0px;
-  background-color: black;
+  background-color: #080808;
   padding: 8px;
   border-radius: 2px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-size: 1.5em;
+  border-radius: 16px 16px 0 0;
+}
+
+.keyboard-row {
+  display: flex;
+  flex-direction: row;
+}
+
+.keyboard-row-2 {
+  padding-left: 1em;
+}
+
+.keyboard-letter {
+  width: 2em;
+  height: 2em;
+  line-height: 2em;
+  text-transform: capitalize;
+
+  background-color: #666;
+  margin: 4px;
+  font-weight: bold;
+  border-radius: 2px;
+}
+
+.keyboard-wide {
+  width: 3em;
 }

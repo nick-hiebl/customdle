@@ -4,7 +4,7 @@ import { useGameContext } from './GameContext'
 const Settings = ({
   setSettings,
 }) => {
-  const { showCompleted } = useGameContext()
+  const { showCompleted, showKeyboard } = useGameContext()
 
   return (
     <div className="settings">
@@ -16,6 +16,15 @@ const Settings = ({
           showCompleted: !settings.showCompleted,
         }))}
       /> Show completed words?
+      <br />
+      <input
+        type="checkbox"
+        checked={showKeyboard}
+        onChange={() => setSettings((settings) => ({
+          ...settings,
+          showKeyboard: !settings.showKeyboard,
+        }))}
+      /> Show keyboard?
     </div>
   )
 }

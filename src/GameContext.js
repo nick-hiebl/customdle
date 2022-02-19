@@ -5,6 +5,7 @@ export const DEFAULT_STATE = {
   games: 9,
   showCompleted: true,
   numGames: 9,
+  showKeyboard: true,
 }
 
 const GameContext = React.createContext(DEFAULT_STATE)
