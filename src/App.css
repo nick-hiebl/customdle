@@ -1,3 +1,21 @@
+@media only screen and (max-width: 800px) {
+  body {
+    font-size: 0.8em;
+  }
+}
+
+@media only screen and (max-width: 500px) {
+  body {
+    font-size: 0.5em;
+  }
+}
+
+@media only screen and (max-width: 300px) {
+  body {
+    font-size: 0.4em;
+  }
+}
+
 .App {
   text-align: center;
   font-family: sans-serif;
@@ -41,7 +59,7 @@ h1 {
   width: 1.5em;
   height: 1.5em;
   line-height: 1.5em;
-  margin: 2px;
+  margin: 0.1em;
   border-radius: 2px;
   text-transform: capitalize;
   font-weight: bold;
@@ -52,8 +70,8 @@ h1 {
   display: flex;
   justify-content: center;
   flex-wrap: wrap;
-  max-width: 240px;
-  margin: 8px 0;
+  max-width: 12em;
+  margin: 0.8em 0;
 }
 
 .games-container {
@@ -107,7 +125,7 @@ h1 {
   text-transform: capitalize;
 
   background-color: #666;
-  margin: 4px;
+  margin: 0.2em;
   font-weight: bold;
   border-radius: 2px;
 }
