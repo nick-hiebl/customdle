@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback } from 'react'
+import React, { useCallback, useEffect, useMemo, useState } from 'react'
 
 import { useEventListener } from './useEventListener'
 import { useGameContext } from './GameContext'
@@ -11,7 +11,27 @@ const FIRST_ROW = 'qwertyuiop'
 const SECOND_ROW = 'asdfghjkl'
 const THIRD_ROW = 'zxcvbnm'
 
-const Keyboard = ({ processKey }) => {
+const Key = ({ guesses, letter, processKey }) => {
+  const keyUsed = useMemo(
+    () => guesses.some((guess) => guess.includes(letter)),
+    [guesses, letter],
+  )
+
+  const classes = keyUsed
+    ? "keyboard-letter-used keyboard-letter"
+    : "keyboard-letter"
+
+  return (
+    <div
+      className={classes}
+      onClick={() => processKey(letter)}
+    >
+      {letter}
+    </div>
+  )
+}
+
+const Keyboard = ({ guesses, processKey }) => {
   const { showKeyboard = true } = useGameContext()
 
   if (!showKeyboard) {
@@ -22,24 +42,22 @@ const Keyboard = ({ processKey }) => {
     <div className="keyboard">
       <div className="keyboard-row">
         {Array.from(FIRST_ROW).map((letter) => (
-          <div
+          <Key
             key={letter}
-            className="keyboard-letter"
-            onClick={() => processKey(letter)}
-          >
-            {letter}
-          </div>
+            guesses={guesses}
+            letter={letter}
+            processKey={processKey}
+          />
         ))}
       </div>
       <div className="keyboard-row keyboard-row-2">
         {Array.from(SECOND_ROW).map((letter) => (
-          <div
+          <Key
             key={letter}
-            className="keyboard-letter"
-            onClick={() => processKey(letter)}
-          >
-            {letter}
-          </div>
+            guesses={guesses}
+            letter={letter}
+            processKey={processKey}
+          />
         ))}
       </div>
       <div className="keyboard-row">
@@ -50,16 +68,15 @@ const Keyboard = ({ processKey }) => {
           ⌫
         </div>
         {Array.from(THIRD_ROW).map((letter) => (
-          <div
+          <Key
             key={letter}
-            className="keyboard-letter"
-            onClick={() => processKey(letter)}
-          >
-            {letter}
-          </div>
+            guesses={guesses}
+            letter={letter}
+            processKey={processKey}
+          />
         ))}
         <div
-          className="keyboard-letter keyboard-wide"
+          className="keyboard-letter keyboard-semi-wide"
           onClick={() => processKey('enter')}
         >
           ✓
@@ -70,6 +87,7 @@ const Keyboard = ({ processKey }) => {
 }
 
 const Input = ({
+  guesses,
   isValidGuess,
   length,
   onGuessChange,
@@ -129,7 +147,7 @@ const Input = ({
           </span>
         ))}
       </div>
-      <Keyboard processKey={processKey} />
+      <Keyboard guesses={guesses} processKey={processKey} />
     </div>
   )
 }

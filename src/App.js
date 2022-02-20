@@ -6,13 +6,11 @@ import Input from './Input'
 import Settings from './Settings'
 import GameComponent from './GameComponent'
 
-import { chooseWords, isWord } from './Game'
+import { isWord } from './Game'
 import { GameContextProvider, DEFAULT_STATE } from './GameContext'
-import { useNumGames } from './NumGamesInURL'
+import { useSecretsAndGuesses } from './GuessesAndSecrets'
 
 const LENGTH = 5
-
-// const ALLOWED_GUESSES = 13
 
 const isComplete = (guesses, secrets) => {
   return secrets.every((secret) => guesses.includes(secret))
@@ -34,26 +32,20 @@ const goodGoal = (secrets) => {
 }
 
 function App() {
-  const games = useNumGames()
   const [gameContext, setGameContext] = useState(DEFAULT_STATE)
-  const [secrets, setSecrets] = useState(chooseWords(games))
   const [guess, setGuess] = useState('')
-  const [guesses, setGuesses] = useState([])
 
-  useEffect(() => {
-    setSecrets(chooseWords(games))
-    setGuesses([])
-  }, [games])
+  const {
+    games,
+    guesses,
+    secrets,
+    addGuess,
+    reset,
+  } = useSecretsAndGuesses()
 
   const isFinished = isComplete(guesses, secrets)
 
   const allowedGuesses = Math.max(3, guesses.length + !isFinished)
-
-  const onSubmit = (newGuess) => {
-    if (guesses.length < allowedGuesses) {
-      setGuesses(guesses.concat(newGuess))
-    }
-  }
 
   const isValidGuess = useCallback(
     (guess) => {
@@ -91,7 +83,7 @@ function App() {
           Click on a section for some hints about available letters.
         </div>
         {isFinished && <h3>You found {countWord} in {guesses.length} guesses!</h3>}
-        <Settings setSettings={setGameContext} />
+        <Settings reset={reset} setSettings={setGameContext} />
         <div className="App-header">
           <div className="games-container">
             {secrets.map((secret, index) => (
@@ -106,9 +98,10 @@ function App() {
             ))}
           </div>
           <Input
+            guesses={guesses}
             length={LENGTH}
             onGuessChange={setGuess}
-            onSubmit={onSubmit}
+            onSubmit={addGuess}
             isValidGuess={isValidGuess}
           />
         </div>
