@@ -1,12 +1,12 @@
 import React, { useCallback, useState, useEffect } from 'react'
 
-import Input from '../Input'
-import Settings from '../Settings'
-import GameComponent from '../GameComponent'
+import Input from '../../Input'
+import Settings from '../../Settings'
+import GameComponent from '../../GameComponent'
 
-import { isWord } from '../Game'
-import { GameContextProvider, DEFAULT_STATE } from '../GameContext'
-import { useSecretsAndGuesses } from '../GuessesAndSecrets'
+import { isWord } from '../../utils/GameLogic'
+import { GameContextProvider, DEFAULT_STATE } from '../../GameContext'
+import { useSecretsAndGuesses } from '../../GuessesAndSecrets'
 
 const LENGTH = 5
 
@@ -15,18 +15,7 @@ const isComplete = (guesses, secrets) => {
 }
 
 const goodGoal = (secrets) => {
-  if (secrets >= 7) {
-    return secrets + 3
-  }
-
-  return {
-    1: 6,
-    2: 7,
-    3: 8,
-    4: 9,
-    5: 9,
-    6: 10,
-  }[secrets]
+  return secrets + 5
 }
 
 function MultiWordle() {

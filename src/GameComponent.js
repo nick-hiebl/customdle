@@ -2,7 +2,7 @@ import React, { useEffect, useMemo, useState } from 'react'
 
 import HintSection from './HintSection'
 
-import { compare } from './Game'
+import { compare } from './utils/GameLogic'
 import { useGameContext } from './GameContext'
 
 const processPatterns = (guesses, secretWord) => {

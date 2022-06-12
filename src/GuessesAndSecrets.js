@@ -1,7 +1,7 @@
 import { useState, useCallback, useEffect } from 'react'
 
 import { useNumGames } from './NumGamesInURL'
-import { chooseWords } from './Game'
+import { chooseWords } from './utils/GameLogic'
 
 const GUESSES = 'guesses'
 const SECRETS = 'secrets'

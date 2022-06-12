@@ -1,15 +1,27 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 
-import { useEventListener } from './utils/useEventListener'
-import { useGameContext } from './GameContext'
+import * as Styled from './styled'
+import { useEventListener } from '../../utils/useEventListener'
 
-const LETTERS = 'abcdefghijklmnopqrstuvwxyz'
+// Split into an array so values like 'abc' aren't considered part of includes
+const LETTERS = Array.from('abcdefghijklmnopqrstuvwxyz')
 const BACKSPACE = 'backspace'
 const ENTER = 'enter'
 
-const FIRST_ROW = 'qwertyuiop'
-const SECOND_ROW = 'asdfghjkl'
-const THIRD_ROW = 'zxcvbnm'
+// Split into array for mapping purposes
+const FIRST_ROW = Array.from('qwertyuiop')
+const SECOND_ROW = Array.from('asdfghjkl')
+const THIRD_ROW = Array.from('zxcvbnm')
+
+const BaseKey = ({ children, component, isUsed, letter, processKey }) => {
+  const Comp = component || Styled.Key
+
+  return (
+    <Comp isUsed={isUsed} onClick={() => processKey(letter)}>
+      {children}
+    </Comp>
+  )
+}
 
 const Key = ({ guesses, letter, processKey }) => {
   const keyUsed = useMemo(
@@ -17,31 +29,18 @@ const Key = ({ guesses, letter, processKey }) => {
     [guesses, letter],
   )
 
-  const classes = keyUsed
-    ? "keyboard-letter-used keyboard-letter"
-    : "keyboard-letter"
-
   return (
-    <div
-      className={classes}
-      onClick={() => processKey(letter)}
-    >
+    <Styled.Key isUsed={keyUsed} onClick={() => processKey(letter)}>
       {letter}
-    </div>
+    </Styled.Key>
   )
 }
 
 const Keyboard = ({ guesses, processKey }) => {
-  const { showKeyboard = true } = useGameContext()
-
-  if (!showKeyboard) {
-    return null
-  }
-
   return (
-    <div className="keyboard">
-      <div className="keyboard-row">
-        {Array.from(FIRST_ROW).map((letter) => (
+    <Styled.Keyboard>
+      <Styled.KeyboardRow>
+        {FIRST_ROW.map((letter) => (
           <Key
             key={letter}
             guesses={guesses}
@@ -49,9 +48,9 @@ const Keyboard = ({ guesses, processKey }) => {
             processKey={processKey}
           />
         ))}
-      </div>
-      <div className="keyboard-row keyboard-row-2">
-        {Array.from(SECOND_ROW).map((letter) => (
+      </Styled.KeyboardRow>
+      <Styled.KeyboardRow isLeftPadded>
+        {SECOND_ROW.map((letter) => (
           <Key
             key={letter}
             guesses={guesses}
@@ -59,15 +58,16 @@ const Keyboard = ({ guesses, processKey }) => {
             processKey={processKey}
           />
         ))}
-      </div>
-      <div className="keyboard-row">
-        <div
-          className="keyboard-letter keyboard-wide"
-          onClick={() => processKey(BACKSPACE)}
+      </Styled.KeyboardRow>
+      <Styled.KeyboardRow>
+        <BaseKey
+          component={Styled.WideKey}
+          letter={BACKSPACE}
+          processKey={processKey}
         >
-          ⌫
-        </div>
-        {Array.from(THIRD_ROW).map((letter) => (
+         ⌫
+        </BaseKey>
+        {THIRD_ROW.map((letter) => (
           <Key
             key={letter}
             guesses={guesses}
@@ -75,38 +75,44 @@ const Keyboard = ({ guesses, processKey }) => {
             processKey={processKey}
           />
         ))}
-        <div
-          className="keyboard-letter keyboard-semi-wide"
-          onClick={() => processKey(ENTER)}
+        <BaseKey
+          component={Styled.SemiWideKey}
+          letter={ENTER}
+          processKey={processKey}
         >
           ✓
-        </div>
-      </div>
-    </div>
+        </BaseKey>
+      </Styled.KeyboardRow>
+    </Styled.Keyboard>
   )
 }
 
-const Input = ({
+const KeyboardControl = ({
   guesses,
   isValidGuess,
-  length,
-  onGuessChange,
+  width,
+  onChange,
   onSubmit,
+  isDisabled,
 }) => {
   const [guess, setGuess] = useState('')
   const [submitting, setSubmitting] = useState(false)
 
   const processKey = useCallback((key) => {
+    if (isDisabled) {
+      return
+    }
+
     if (LETTERS.includes(key)) {
       setGuess((current) => (
-        (current + key).slice(0, length)
+        (current + key).slice(0, width)
       ))
     } else if (key === BACKSPACE) {
       setGuess((current) => current.slice(0, current.length - 1))
     } else if (key === ENTER) {
       setSubmitting(true)
     }
-  }, [length])
+  }, [isDisabled, width])
 
   const onKeyDown = useCallback((event) => {
     if (event.altKey || event.ctrlKey || event.metaKey) {
@@ -122,34 +128,24 @@ const Input = ({
   useEffect(() => {
     if (submitting) {
       if (isValidGuess(guess)) {
-        onGuessChange('')
+        onChange('')
         onSubmit(guess)
         setGuess('')
       }
 
       setSubmitting(false)
     }
-  }, [guess, isValidGuess, onGuessChange, onSubmit, submitting])
+  }, [guess, isValidGuess, onChange, onSubmit, submitting])
 
   useEffect(() => {
-    onGuessChange(guess)
-  }, [guess, onGuessChange])
+    onChange(guess)
+  }, [guess, onChange])
 
   return (
-    <div className="input">
-      <div className="game-row game-row-input" style={{ fontSize: '1.8em' }}>
-        {Array.from(guess.padEnd(length, ' ')).map((letter, index) => (
-          <span key={index} className="letter" style={{
-            color: 'white',
-            backgroundColor: '#666',
-          }}>
-            {letter}
-          </span>
-        ))}
-      </div>
+    <Styled.Input>
       <Keyboard guesses={guesses} processKey={processKey} />
-    </div>
+    </Styled.Input>
   )
 }
 
-export default Input;
+export default KeyboardControl

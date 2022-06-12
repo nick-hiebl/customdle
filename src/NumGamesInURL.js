@@ -1,6 +1,6 @@
 import { useCallback, useState } from 'react'
 
-import { useEventListener } from './useEventListener'
+import { useEventListener } from './utils/useEventListener'
 
 const getGamesFromURL = () => {
   const searchParams = new URLSearchParams(document.location.hash.replace('#', '?'))
