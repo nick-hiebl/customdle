@@ -8,7 +8,7 @@ import './App.css'
 
 function App() {
   return (
-    <BrowserRouter basename="/customdle">
+    <BrowserRouter>
       <Routes>
         <Route path="tournament" element={<Tournament />} />
         <Route path="*" element={<MultiWordle />} />
