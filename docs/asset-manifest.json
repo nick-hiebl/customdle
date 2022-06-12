@@ -1,13 +1,13 @@
 {
   "files": {
     "main.css": "/customdle/static/css/main.e09cd9b6.css",
-    "main.js": "/customdle/static/js/main.428e4f64.js",
+    "main.js": "/customdle/static/js/main.1da894de.js",
     "index.html": "/customdle/index.html",
     "main.e09cd9b6.css.map": "/customdle/static/css/main.e09cd9b6.css.map",
-    "main.428e4f64.js.map": "/customdle/static/js/main.428e4f64.js.map"
+    "main.1da894de.js.map": "/customdle/static/js/main.1da894de.js.map"
   },
   "entrypoints": [
     "static/css/main.e09cd9b6.css",
-    "static/js/main.428e4f64.js"
+    "static/js/main.1da894de.js"
   ]
 }
